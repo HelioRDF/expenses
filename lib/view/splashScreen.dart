@@ -17,7 +17,7 @@ class _ScreenInitialState extends State<ScreenInitial> {
   @override
   Widget build(BuildContext context) {
     return new SplashScreen(
-      seconds:2,
+      seconds: 2,
       navigateAfterSeconds: new Home(),
       title: new Text(
         'Bem-Vindo!',

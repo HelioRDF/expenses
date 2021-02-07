@@ -9,49 +9,34 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-     
-      child: SingleChildScrollView(
-              child: Padding(
-            padding: const EdgeInsets.only(left: 15,right: 15, bottom: 30),
-            child: Column(
-              children: [
-                Container(
-                    height: 350,
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: ListView.builder(
+          itemCount: _transactions.length,
+          itemBuilder: (ctx, indice) {
+            Trasaction tr = _transactions[indice];
 
-                    // color: Color(0xFFDADBE4),
-                    child: ListView.builder(
-                        itemCount: _transactions.length,
-                        itemBuilder: (ctx, indice) {
-                          Trasaction tr = _transactions[indice];
-
-                          return Card(
-                            elevation: 5,
-                            margin:
-                                EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                radius: 30,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: FittedBox(child: Text('R\$${tr.value}')),
-                                ),
-                              ),
-                              title: Text(
-                                tr.title,
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                              subtitle: Text(
-                                DateFormat('d-MMM-y').format(tr.date),
-                              ),
-                            ),
-                          );
-                        }))
-              ],
-            ),
-         
-        ),
-      ),
+            return Card(
+              elevation: 5,
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+              child: ListTile(
+                leading: CircleAvatar(
+                  radius: 30,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FittedBox(child: Text('R\$${tr.value}')),
+                  ),
+                ),
+                title: Text(
+                  tr.title,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                subtitle: Text(
+                  DateFormat('d-MMM-y').format(tr.date),
+                ),
+              ),
+            );
+          }),
     );
   }
 }

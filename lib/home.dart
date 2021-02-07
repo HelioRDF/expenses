@@ -15,29 +15,33 @@ class _HomeState extends State<Home> {
         id: 't1',
         title: "Novo Tênis de corrida",
         value: 310.76,
-        date: DateTime.now().subtract(Duration(days:33))),
+        date: DateTime.now().subtract(Duration(days: 33))),
     Trasaction(
-        id: 't2', title: "Conta de Luz", value: 211.30, 
-        date: DateTime.now().subtract(Duration(days:3))),
+        id: 't2',
+        title: "Conta de Luz",
+        value: 211.30,
+        date: DateTime.now().subtract(Duration(days: 3))),
     Trasaction(
-        id: 't3', title: "Conta de Aguá", value: 78.30,
-        date: DateTime.now().subtract(Duration(days:4))),
-
-            Trasaction(
-        id: 't4', title: "Internet", value: 110.30,
-        date: DateTime.now().subtract(Duration(days:5))),
-                    Trasaction(
-        id: 't4', title: "Whey", value: 140.30,
-        date: DateTime.now().subtract(Duration(days:7))),
+        id: 't3',
+        title: "Conta de Aguá",
+        value: 78.30,
+        date: DateTime.now().subtract(Duration(days: 4))),
+    Trasaction(
+        id: 't4',
+        title: "Internet",
+        value: 110.30,
+        date: DateTime.now().subtract(Duration(days: 5))),
+    Trasaction(
+        id: 't4',
+        title: "Whey",
+        value: 140.30,
+        date: DateTime.now().subtract(Duration(days: 7))),
   ];
 
-  
-
-  List<Trasaction> get _recentTransactions{
-    return _transactions.where((tr) 
-    {
-    return tr.date.isAfter(DateTime.now().subtract(Duration(days:7)));}
-    ).toList();
+  List<Trasaction> get _recentTransactions {
+    return _transactions.where((tr) {
+      return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
   }
 
   _onSubmit(descricao, valor) {
@@ -61,25 +65,29 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    var appBar = AppBar(
+      title: Text("Despesas"),
+      actions: [
+        IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () => _showTransactionsForm(context))
+      ],
+    );
+    var alturaTela = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Despesas"),
-        actions: [
-          IconButton(
-              icon: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              onPressed: () => _showTransactionsForm(context))
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-         Chart(_recentTransactions),
-          TransactionList(_transactions),
+          Container( height: alturaTela*0.34, child: Chart(_recentTransactions)),
+          Container(height: alturaTela*0.64, child: TransactionList(_transactions)),
         ],
       )),
       floatingActionButton: FloatingActionButton(
