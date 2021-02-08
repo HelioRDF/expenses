@@ -13,7 +13,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final List<Trasaction> _transactions = [];
-
   List<Trasaction> get _recentTransactions {
     return _transactions.where((tr) {
       return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
@@ -50,30 +49,32 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    var appBar = AppBar(
+      title: Text("Despesas"),
+      actions: [
+        IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () => _showTransactionsForm(context))
+      ],
+    );
+    var alturaTela = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Despesas"),
-        actions: [
-          IconButton(
-              icon: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              onPressed: () => _showTransactionsForm(context))
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Chart(_recentTransactions),
-          _transactions.length == 0
-              ? Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text("Nenhuma informação cadastrada!"),
-                )
-              : TransactionList(_transactions, _removeTransaction),
+          Container(
+              height: alturaTela * 0.34, child: Chart(_recentTransactions)),
+          Container(
+              height: alturaTela * 0.64,
+              child: TransactionList(_transactions, _removeTransaction)),
         ],
       )),
       floatingActionButton: FloatingActionButton(
