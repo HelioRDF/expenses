@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
-  final Function(String, double) onsubmit;
+  final Function(String, double, DateTime) onsubmit;
   TransactionForm(this.onsubmit);
 
   @override
@@ -13,27 +13,18 @@ class _TransactionFormState extends State<TransactionForm> {
   final _textoController = TextEditingController();
 
   final _valorController = TextEditingController();
-  DateTime _dataSelecionada;
+  DateTime _dataSelecionada = DateTime.now();
 
-  _ShowDatePicker() {
+  _showDatePicker() {
     showDatePicker(
             context: context,
             initialDate: DateTime.now(),
             firstDate: DateTime(2021),
             lastDate: DateTime.now())
         .then((value) => {
-              if (value == null)
-                {
-                  setState(() {
-                    _dataSelecionada = DateTime.now();
-                  })
-                }
-              else
-                {
-                  setState(() {
-                    _dataSelecionada = value;
-                  })
-                }
+              setState(() {
+                _dataSelecionada = value;
+              })
             });
   }
 
@@ -57,13 +48,15 @@ class _TransactionFormState extends State<TransactionForm> {
             Container(
               height: 70,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _dataSelecionada == null
                       ? Text("Nenhuma data Selecionada")
-                      : Text(DateFormat("dd/MM/y").format(_dataSelecionada)),
+                      : Text("Data: " +
+                          DateFormat("dd/MM/y").format(_dataSelecionada)),
                   FlatButton(
                       textColor: Theme.of(context).primaryColor,
-                      onPressed: _ShowDatePicker,
+                      onPressed: _showDatePicker,
                       child: Text(
                         "Selecionar Data",
                         style: TextStyle(fontWeight: FontWeight.bold),
@@ -83,7 +76,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   onPressed: () {
                     String texto = _textoController.text;
                     double valor = double.parse(_valorController.text);
-                    widget.onsubmit(texto, valor);
+                    widget.onsubmit(texto, valor, _dataSelecionada);
                   },
                 ),
               ],

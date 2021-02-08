@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:expenses/components/chart.dart';
 import 'package:flutter/material.dart';
 import 'components/transactions_form.dart';
@@ -10,45 +12,32 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<Trasaction> _transactions = [
-    Trasaction(
-        id: 't1',
-        title: "Novo Tênis de corrida",
-        value: 310.76,
-        date: DateTime.now().subtract(Duration(days:33))),
-    Trasaction(
-        id: 't2', title: "Conta de Luz", value: 211.30, 
-        date: DateTime.now().subtract(Duration(days:3))),
-    Trasaction(
-        id: 't3', title: "Conta de Aguá", value: 78.30,
-        date: DateTime.now().subtract(Duration(days:4))),
+  final List<Trasaction> _transactions = [];
 
-            Trasaction(
-        id: 't4', title: "Internet", value: 110.30,
-        date: DateTime.now().subtract(Duration(days:5))),
-                    Trasaction(
-        id: 't4', title: "Whey", value: 140.30,
-        date: DateTime.now().subtract(Duration(days:7))),
-  ];
-
-  
-
-  List<Trasaction> get _recentTransactions{
-    return _transactions.where((tr) 
-    {
-    return tr.date.isAfter(DateTime.now().subtract(Duration(days:7)));}
-    ).toList();
+  List<Trasaction> get _recentTransactions {
+    return _transactions.where((tr) {
+      return tr.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
   }
 
-  _onSubmit(descricao, valor) {
+  _onSubmit(descricao, valor, date) {
     Trasaction item = Trasaction(
-        id: descricao, title: descricao, value: valor, date: DateTime.now());
+        id: Random().nextDouble().toString(),
+        title: descricao,
+        value: valor,
+        date: date);
 
     setState(() {
       _transactions.add(item);
     });
 
     Navigator.of(context).pop();
+  }
+
+  _removeTransaction(id) {
+    setState(() {
+      _transactions.removeWhere((element) => element.id == id);
+    });
   }
 
   _showTransactionsForm(ctx) {
@@ -78,8 +67,13 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-         Chart(_recentTransactions),
-          TransactionList(_transactions),
+          Chart(_recentTransactions),
+          _transactions.length == 0
+              ? Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text("Nenhuma informação cadastrada!"),
+                )
+              : TransactionList(_transactions, _removeTransaction),
         ],
       )),
       floatingActionButton: FloatingActionButton(
