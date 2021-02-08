@@ -74,7 +74,12 @@ class _HomeState extends State<Home> {
               height: alturaTela * 0.34, child: Chart(_recentTransactions)),
           Container(
               height: alturaTela * 0.64,
-              child: TransactionList(_transactions, _removeTransaction)),
+              child:_transactions.length == 0
+              ? Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text("Nenhuma informação cadastrada!"),
+                )
+              : TransactionList(_transactions, _removeTransaction)),
         ],
       )),
       floatingActionButton: FloatingActionButton(
